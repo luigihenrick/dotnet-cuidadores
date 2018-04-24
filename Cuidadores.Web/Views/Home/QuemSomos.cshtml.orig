@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "QuemSomos";
+}
+
+<style>
+    a{
+        color: white;
+    }
+</style>
+
+<h3>Quem somos?</h3>
+
+<p>Cuidadores é uma plataforma criada para conectar pessoas com familiares que precisam de atendimentos especiais e profissionais da área da saúde.</p>
+
+<h3>Como funciona?</h3>
+
+<<<<<<< HEAD
+<p>Você se cadastra e diz para nós se é um cuidador ou um tutor.</p>
+=======
+<p>Você se cadastra e diz para nós se é um cuidador ou um paciente.</p>
+>>>>>>> 0d45b0aac860eea1ee45cac609fd5770b141822a
+
+<h3>Quero ser um cuidador </h3>
+<p>Se você é um profissional de saúde, cadastre-se como um cuidador nos indique quais são suas especialidades.</p>
+
+<h3>Gostou da ideia?</h3>
+<button class="btn btn-success">@Html.ActionLink("Comece agora!", "Cadastro", "Home", new { id = 0 }, new { })</button>

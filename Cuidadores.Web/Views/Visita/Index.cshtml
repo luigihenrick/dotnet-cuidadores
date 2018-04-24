@@ -1,0 +1,28 @@
+﻿@using Cuidadores.Core.Entities
+@model Cuidadores.Web.Models.Visita.IndexVm
+           
+@{
+    ViewBag.Title = "Resumo Visitas";
+}
+
+<br />
+
+<h3>Visitas</h3>
+
+<br />
+
+<div class="col-md-12">
+    @if (Model.TipoPessoa == TipoPessoa.Cuidador)
+    {
+        @Html.Partial("_IndexCuidador", Model)
+    }
+    else if (Model.TipoPessoa == TipoPessoa.Paciente)
+    {
+        @Html.Partial("_IndexPaciente", Model)
+    }
+    else
+    {
+        <strong>Nenhuma visita encontrada.</strong>
+    }
+
+</div>

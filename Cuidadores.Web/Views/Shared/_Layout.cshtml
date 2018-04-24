@@ -1,0 +1,216 @@
+﻿@using Cuidadores.Core.Entities
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap-lumen.css")
+    @Styles.Render("~/Content/bootstrap-multiselect.css")
+    @Styles.Render("~/Content/bootstrap-datetimepicker.css")
+    @Styles.Render("~/Content/font-awesome.min.css")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Cuidadores", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (Session["Usuario"] != null)
+                {
+                    if (((Pessoa) Session["Usuario"]).TipoPessoa == TipoPessoa.Cuidador)
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Visitas", "Index", "Visita")</li>
+                            <li>@Html.ActionLink("Especialidades", "Index", "Especialidade")</li>
+                        </ul>
+                    }
+                    else if (((Pessoa)Session["Usuario"]).TipoPessoa == TipoPessoa.Paciente)
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Buscar", "Buscar", "Pessoa")</li>
+                            <li>@Html.ActionLink("Visitas", "Index", "Visita")</li>
+                        </ul>
+                    }
+                    
+                }
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["Usuario"] == null)
+                    {
+                        <li>
+                            @Html.ActionLink("Cadastro", "Cadastro", "Home",
+                                new { id = 0 }, new { })
+                        </li>
+                        <li>@Html.ActionLink("Login", "Login", "Home")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Olá, " + ((Pessoa)Session["Usuario"]).Nome, "Index", "Home")</li>
+                        <li>
+                            @Html.ActionLink("Editar Cadastro", "Cadastro", "Home",
+                           new { id = ((Pessoa)Session["Usuario"]).Id }, new { })
+                        </li>
+                        <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @TempData["success"]
+        </div>
+    }
+    @if (TempData["warning"] != null)
+    {
+        <div class="alert alert-dismissible alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @TempData["warning"]
+        </div>
+    }
+    @if (TempData["error"] != null)
+    {
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @TempData["error"]
+        </div>
+    }
+
+    <!-- Content area -->
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - PajésFatec</p>
+        </footer>
+    </div>
+    
+    <div id="div-modal-fade" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 96%; left: 0%;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div id="div-modal-content" class="modal-body" style="padding-left: 0px; padding-right: 0px;">
+                    <img src="@Url.Content("~/Content/img/loading.gif")" />
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <button id="button-close-modal" type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Fechar</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    @Scripts.Render("~/Scripts/moment.js")
+    @Scripts.Render("~/Scripts/bootstrap-multiselect.js")
+    @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
+    @Scripts.Render("~/Scripts/jquery.inputmask.bundle.min.js")
+    
+    <script type="text/javascript">
+        $('.collapse').on('shown.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        }).on('hidden.bs.collapse', function () {
+            $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        });
+    </script>
+    
+    <script type="text/javascript">
+
+        var modalCloseCallback = function() {};
+
+        /* Chama um callback ao fechar o modal */
+
+        $('#div-modal-fade').on('hidden.bs.modal', function() {
+            if (modalCloseCallback && typeof(modalCloseCallback) == 'function') {
+                modalCloseCallback();
+            }
+        });
+
+        function openModal(url, title, data, options) {
+
+            $('#div-modal-fade .modal-title').html(title);
+
+            $('#div-modal-content').html('<p><img src="@Url.Content("~/Content/img/loading.gif")"/></p>');
+
+            $('#div-modal-fade').modal('show');
+
+            if (options) {
+                if (options.hideFooter) {
+                    $('#div-modal-fade .modal-footer div').hide();
+                } else {
+                    $('#div-modal-fade .modal-footer div').show();
+                }
+
+                if (options.closeCallback && typeof(options.closeCallback) == 'function') {
+                    modalCloseCallback = function() {
+                        options.closeCallback(options);
+                    };
+                } else {
+                    modalCloseCallback = function() {};
+                }
+            } else {
+                $('#div-modal-fade .modal-footer div').show();
+                modalCloseCallback = function () { };
+            }
+
+            $.get(url, data, function (html) {
+                $('#div-modal-content').html(html);
+            });
+        }
+
+        $('a[data-modal]').unbind('click');
+        $('a[data-modal]').click(function (event) {
+            event.preventDefault();
+
+            var url = $(this).attr('href');
+            var title = $(this).data('modaltitle');
+
+            openModal(url, title);
+
+            return false;
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        $('input[data-inputmask]').inputmask();
+
+        $('.container').on('keyup change paste', 'input[data-maskphone]', function () {
+            if ($(this).val().replace(/[_\-()]/g, "").length >= 12) {
+                $(this).inputmask({ mask: "(99) 99999-9999" });
+            }
+            else {
+                $(this).inputmask({ mask: "(99) 9999-9999[9]", greedy: false });
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.multiselect-ui').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuidadores.Web", "Cuidadores.Web\Cuidadores.Web.csproj", "{E1BC8E90-A157-4827-B58B-54A1AC3E6849}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuidadores.Core", "Cuidadores.Core\Cuidadores.Core.csproj", "{E9EB5DFA-C9AF-4577-87BE-558586E9CD67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuidadores.Util", "Cuidadores.Util\Cuidadores.Util.csproj", "{E73BCEBD-AF1B-4D74-9104-B5F6FE96C5C3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1BC8E90-A157-4827-B58B-54A1AC3E6849}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1BC8E90-A157-4827-B58B-54A1AC3E6849}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1BC8E90-A157-4827-B58B-54A1AC3E6849}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1BC8E90-A157-4827-B58B-54A1AC3E6849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9EB5DFA-C9AF-4577-87BE-558586E9CD67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9EB5DFA-C9AF-4577-87BE-558586E9CD67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9EB5DFA-C9AF-4577-87BE-558586E9CD67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9EB5DFA-C9AF-4577-87BE-558586E9CD67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E73BCEBD-AF1B-4D74-9104-B5F6FE96C5C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E73BCEBD-AF1B-4D74-9104-B5F6FE96C5C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E73BCEBD-AF1B-4D74-9104-B5F6FE96C5C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E73BCEBD-AF1B-4D74-9104-B5F6FE96C5C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,103 @@
+﻿@using Cuidadores.Core.Entities
+@using Cuidadores.Util.Extensions
+@model Cuidadores.Web.Models.Pessoa.DetalhesVm
+
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+<br/>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.Nome</h3>
+    </div>
+    <div class="panel-body">
+        <h4>Cadastrado desde: @Model.Criado.ToStringDateFriendly()</h4>
+        <p>RG: @Model.Rg</p>
+        <p>CPF: @Model.Cpf.FormataCpfCnpj()</p>
+        <p>E-mail: @Model.Email</p>
+        <p>Telefone: @Model.Telefone</p>
+        <p>CEP: @Model.Cep.FormataCep()</p>
+        <p>Endereço: <a href="https://www.google.com/maps/search/?api=1&query=@(Model.Endereco + ", " + Model.Numero + " - " + Model.Bairro + " - " + Model.Cidade + " - " + Model.Uf)">@(Model.Endereco + ", " + Model.Numero + " - " + Model.Bairro + " - " + Model.Cidade + " - " + Model.Uf)</a></p>
+    </div>
+</div>
+
+@if (Model.TipoPessoa == TipoPessoa.Cuidador
+        && Model.Paciente != null)
+{
+    <h3>Visitas</h3>
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#add-visita">Adicionar Visita <span class="glyphicon glyphicon-plus pull-right"></span></a>
+                </h4>
+            </div>
+            <div id="add-visita" class="panel-collapse collapse">
+            @using (Html.BeginForm("Nova", "Visita", FormMethod.Post, new {id = "form-adicionar-visita"}))
+            {
+                <input type="hidden" name="CuidadorId" value="@Model.Id"/>
+                <input type="hidden" name="PacienteId" value="@Model.Paciente.Id"/>
+
+                <div class="row" style="margin-left: 10px">
+                    <h4>Data da visita:</h4>
+                    <input type="text" class="form-control" id="datetimepicker" name="DataVisita" value="@DateTime.Now"/>
+                    
+                    <div class="pull-right">
+                        <br/>
+                        <button type="submit" class="btn btn-success">Agendar</button>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+
+    if (Model.Visitas == null || !Model.Visitas.Any())
+    {
+        <h4>Nenhuma visita cadastrada</h4>
+    }
+    else
+    {
+        foreach (Visita item in Model.Visitas)
+        {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@item.DataVisita.ToStringDateTimeFriendly()</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Status da Visita: @item.StatusVisita.GetDisplayName()</p>
+                    <a href="@Url.Action("Detalhes", "Visita", new {id = item.Id})" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Detalhes</a>
+                </div>
+            </div>
+        }
+    }
+}
+
+<!-- DateTime Picker -->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker').datetimepicker({
+            format: 'd/m/Y H:i',
+            inline: true,
+            lang: 'pt-Br'
+        });
+    });
+</script>
+
+<!-- Form Submit -->
+<script type="text/javascript">
+    $('#form-adicionar-visita').on('submit', function(event) {
+        event.preventDefault();
+
+        var url = $(this).attr('action');
+        var data = $(this).serialize();
+
+        $.post(url, data, function(response) {
+            location.reload();
+        });
+
+    });
+</script>

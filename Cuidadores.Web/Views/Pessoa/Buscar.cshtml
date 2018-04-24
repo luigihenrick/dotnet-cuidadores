@@ -1,0 +1,106 @@
+﻿@using System.Web.Mvc.Html
+@using Cuidadores.Core.Entities
+@using Cuidadores.Util.Extensions
+@model Cuidadores.Web.Models.Pessoa.PessoaBuscarVm
+
+@{
+    ViewBag.Title = "Encontrar Cuidadores";
+}
+
+<br />
+
+<h3>Encontrar Cuidadores</h3>
+
+<br />
+
+<div class="col-md-12">
+    
+    @using (Html.BeginForm("Buscar", "Pessoa", FormMethod.Post))
+    {
+
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#form-filters">Filtros <span class="glyphicon glyphicon-plus pull-right"></span></a>
+                    </h4>
+                </div>
+                <div id="form-filters" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                @Html.Label("Nome", new { @class = "form-group" })
+                                @Html.TextBox("Nome", "", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.Label("Bairro", new { @class = "form-group" })
+                                @Html.TextBox("Bairro", "", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.Label("Cidade", new { @class = "form-group" })
+                                @Html.TextBox("Cidade", "", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.Label("UF", new { @class = "form-group" })
+                                @Html.DropDownList("Uf", UF.SP.ToSelectList(), new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.Label("Especialidade", new { @class = "form-group" })
+                                <br />
+                                @*@Html.DropDownList("Especialidade", @Model.EspecialidadesList, new { @class = "multiselect-ui form-control", multiple = "multiple" })*@
+                                @Html.DropDownList("Especialidade", @Model.EspecialidadesList, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-12">
+                                <br/>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }    
+</div>
+
+
+<div class="col-md-12" id="div-cuidadores">
+    <br/>
+    @if (Model.Pessoas == null || !Model.Pessoas.Any())
+    {
+        <p>Nenhum cuidador encontrado</p>
+        <br/>
+    }
+    else
+    {
+        foreach (Pessoa pessoa in Model.Pessoas)
+        {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@pessoa.Nome</h3>
+                </div>
+                <div class="panel-body">
+                    <p>E-mail: @pessoa.Email</p>
+                    <p>Telefone: @pessoa.Telefone</p>
+                    <p>Endereço: <a href="https://www.google.com/maps/search/?api=1&query=@(pessoa.Endereco + ", " + pessoa.Numero + " - " + pessoa.Bairro + ", " + pessoa.Cidade + " - " + pessoa.Uf)">@(pessoa.Endereco + ", " + pessoa.Numero + " - " + pessoa.Bairro + " - " + pessoa.Cidade + " - " + pessoa.Uf)</a></p>
+                    <a data-agendarvisita data-cuidadorid="@pessoa.Id" class="btn btn-primary pull-right"><i class="fa fa-calendar"></i> Agendar visita</a>
+                    <a href="@Url.Action("Detalhes", "Pessoa", new {id = pessoa.Id})" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Detalhes</a>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+    $('#div-cuidadores').on('click', 'a[data-agendarvisita]', function(event) {
+        event.preventDefault();
+
+        var cuidadorId = $(this).data('cuidadorid');
+
+        var url = '@Url.Action("Nova", "Visita")';
+        var title = 'Agendar Visita';
+        var data = { id: cuidadorId };
+        var options = { hideFooter: true };
+
+        window.openModal(url, title, data, options);
+    });
+</script>

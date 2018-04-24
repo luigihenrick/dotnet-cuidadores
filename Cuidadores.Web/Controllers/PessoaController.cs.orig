@@ -1,0 +1,109 @@
+﻿using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Web.Mvc;
+using Cuidadores.Core.Entities;
+using Cuidadores.Core.Services;
+using Cuidadores.Util.Extensions;
+using Cuidadores.Web.Models;
+
+namespace Cuidadores.Web.Controllers
+{
+    public class PessoaController : BaseController
+    {
+        public ActionResult Buscar(long id)
+        {
+            Pessoa pessoa = PessoaService.Instance.GetPessoa(id);
+
+            List<Pessoa> pessoas = new List<Pessoa>();
+            pessoas.Add(pessoa);
+
+            return View("Buscar", new PessoaBuscarVm(pessoas));
+        }
+
+        [HttpGet]
+        public ActionResult Buscar()
+        {
+            return View(new PessoaBuscarVm());
+        }
+
+        [HttpPost]
+        public ActionResult Buscar(string nome, string bairro, string cidade, UF? uf, string especialidade)
+        {
+            var parameters = string.Empty;
+            dynamic parametersObj = new ExpandoObject();
+            
+            if (!string.IsNullOrWhiteSpace(nome))
+            {
+                nome = "%" + nome.EncodeForLike() + "%";
+                parameters = string.Format("{0} and Nome Like @Nome", parameters);
+                parametersObj.Nome = nome;
+            }
+            if (!string.IsNullOrWhiteSpace(bairro))
+            {
+                bairro = "%" + bairro.EncodeForLike() + "%";
+                parameters = string.Format("{0} and Bairro Like @Bairro", parameters);
+                parametersObj.Bairro = bairro;
+            }
+            if (!string.IsNullOrWhiteSpace(cidade))
+            {
+                cidade = "%" + cidade.EncodeForLike() + "%";
+                parameters = string.Format("{0} and Cidade Like @Cidade", parameters);
+                parametersObj.Cidade = cidade;
+            }
+
+            string query = string.Format(@"select * from tbl_pessoa
+                                Where 1 = 1
+                                    and Uf = @Uf
+                                    {0}", parameters);
+
+            List<Pessoa> pessoas = PessoaService.Instance.GetPessoas(
+<<<<<<< HEAD
+                query,
+                new
+                {
+                    Nome = !string.IsNullOrWhiteSpace(nome) ? parametersObj.Nome : "", 
+                    Bairro = !string.IsNullOrWhiteSpace(bairro) ? parametersObj.Bairro : "", 
+                    Cidade = !string.IsNullOrWhiteSpace(cidade) ? parametersObj.Cidade : "", 
+                    Uf = uf.ToString()
+                }).ToList();
+
+            if (especialidade != null && especialidade != 0)
+            {
+                List<Pessoa> pessoasFiltrada = new List<Pessoa>();
+                var registrosEspecialidade = PessoaEspecialidadeService.Instance.GetPessoasEspecialidades(
+                    @"select * from tbl_pessoa_especialidade 
+=======
+                @"select * from tbl_pessoa 
+                    Where 1 = 1 
+                    and Nome Like @Nome
+                    and Bairro Like @Bairro
+                    and Cidade Like @Cidade
+                    and Uf = @Uf
+                    and TipoPessoa = 1",
+                new { Nome = nome, Bairro = bairro, Cidade = cidade, Uf = uf.ToString() }).ToList();
+
+            IEnumerable<PessoaEspecialidade> registrosEspecialidade = new List<PessoaEspecialidade>();
+
+            if (especialidade != "Todas")
+            { 
+                registrosEspecialidade = PessoaEspecialidadeService.Instance.GetPessoasEspecialidades(
+                @"select * from tbl_pessoa_especialidade 
+>>>>>>> acc6ef75d81cc9d8b33f8bbf7badb8a2a2ddc631
+                    Where 1 = 1 
+                    and IdEspecialidade = @IdEspecialidade",
+            new { IdEspecialidade = especialidade }).ToList();
+            }
+            else registrosEspecialidade = PessoaEspecialidadeService.Instance.All();
+
+            List<Pessoa> pessoasFiltrada = new List<Pessoa>();
+
+            foreach (var pessoa in pessoas)
+                    if (registrosEspecialidade.Any(x => x.IdPessoa == pessoa.Id)) pessoasFiltrada.Add(pessoa);
+
+                pessoas = pessoasFiltrada;
+
+            return View(new PessoaBuscarVm(pessoas));
+        }
+    }
+}

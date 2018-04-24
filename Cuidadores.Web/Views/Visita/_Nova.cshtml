@@ -1,0 +1,44 @@
+﻿@model Cuidadores.Core.Models.VisitaVm
+
+@using (Html.BeginForm("Nova", "Visita", FormMethod.Post))
+{
+    <input type="hidden" name="CuidadorId" value="@Model.CuidadorId" />
+    <input type="hidden" name="PacienteId" value="@Model.PacienteId" />
+    
+    <div class="col-md-12">
+        <h4>Cuidador:</h4>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">@Model.CuidadorNome</h3>
+            </div>
+            <div class="panel-body">
+                <p>E-mail: @Model.CuidadorEmail</p>
+                <p>Telefone: @Model.CuidadorTelefone</p>
+                <p>Endereço: @Model.CuidadorEndereco</p>
+            </div>
+        </div>
+        
+        <h4>Data da visita:</h4>
+        <div class="row" style="margin-left: 0px;padding-right: 5px;">
+            <input type="text" class="form-control" id="datetimepicker" name="DataVisita" style="padding-right: 0px;" 
+                   value="@DateTime.Now"/>
+        </div>
+        
+        <div class="pull-right">
+            <br/>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Agendar</button>
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker').datetimepicker({
+            format: 'd/m/Y H:i',
+            inline: true,
+            lang: 'pt-Br'
+        });
+    });
+</script>

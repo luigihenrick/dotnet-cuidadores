@@ -1,0 +1,22 @@
+﻿@model Cuidadores.Core.Entities.Especialidade
+
+@{
+    ViewBag.Title = "Editar Especialidade";
+}
+
+<br />
+
+<h4>Editar Especialidade</h4>
+
+<br/>
+
+@using (Html.BeginForm("Editar", "Especialidade", FormMethod.Post))
+{
+
+    @Html.LabelFor(x => x.Descricao, new { @class = "form-group"})
+    @Html.TextBoxFor(x => x.Descricao, new { @class = "form-control"})
+    
+    <br/>
+    
+    <button type="submit" class="btn btn-success pull-right">Salvar</button>    
+}

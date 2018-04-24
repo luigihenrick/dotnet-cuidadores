@@ -1,0 +1,40 @@
+﻿@model Cuidadores.Core.Entities.Pessoa
+
+@{
+    ViewBag.Title = "Cadastro";
+}
+
+<br />
+
+@using (Html.BeginForm("Login", "Home", FormMethod.Post, new { id = "form-login-pessoa" }))
+{
+
+    <h3>Login</h3>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Email, new { @class = "form-group" })
+                @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Email)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Senha, new { @class = "form-group" })
+                @Html.PasswordFor(x => x.Senha, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Senha)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success pull-right" style="margin-left: 10px;">Login</button>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-default pull-right">Cancelar</a>
+        </div>
+    </div>
+}

@@ -1,0 +1,52 @@
+﻿@using Cuidadores.Core.Entities
+@using Cuidadores.Core.Models
+@using Cuidadores.Util.Extensions
+@model Cuidadores.Web.Models.Visita.IndexVm
+           
+@if (Model.Visitas == null || !Model.Visitas.Any())
+{
+    <strong>Nenhuma visita cadastrada.</strong>
+}
+else
+{
+    <h5>Total de visitas = @Model.Visitas.Count()</h5>
+    <h5>Visitas não confirmadas = @Model.Visitas.Count(x => x.StatusVisita == StatusVisita.Pendente)</h5>
+    <h5>Visitas confirmadas = @Model.Visitas.Count(x => x.StatusVisita == StatusVisita.Confirmada)</h5>
+    <h5>Visitas canceladas = @Model.Visitas.Count(x => x.StatusVisita == StatusVisita.Cancelada)</h5>
+
+    <br/>
+    
+    <h4>Últimas visitas:</h4>
+
+    <br/>
+    
+    foreach (VisitaVm item in Model.Visitas)
+    {
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">@item.PacienteNome</h3>
+            </div>
+            <div class="panel-body">
+                <p>Data: @item.DataVisita.ToStringDateFriendly()</p>
+                <p>Endereco: <a href="https://www.google.com/maps/search/?api=1&query=@item.PacienteEndereco">@item.PacienteEndereco</a></p>
+                <p>Status da Visita: @item.StatusVisita.GetDisplayName()</p>
+                @if (item.StatusVisita == StatusVisita.Cancelada)
+                {
+                    <p>Justificativa: @item.Justificativa</p>
+                }
+                <a href="@Url.Action("Detalhes", "Visita", new {id = item.Id})" class="btn btn-info pull-right"><i class="fa fa-plus"></i> Detalhes</a>
+                @if (item.StatusVisita == StatusVisita.Pendente)
+                {
+                    <a href="@Url.Action("Confirmar", "Visita", new {id = item.Id})" style="margin-left: 5px;" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Confirmar</a>
+                    if (item.StatusVisita == StatusVisita.Pendente || item.StatusVisita == StatusVisita.Confirmada)
+                    {
+                        <a data-modal data-modaltitle="Cancelar visita" href="@Url.Action("Cancelar", "Visita", new {id = item.Id})" 
+                           style="margin-left: 5px;" class="btn btn-danger pull-right">
+                            <i class="fa fa-close"></i> Cancelar
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    }
+}

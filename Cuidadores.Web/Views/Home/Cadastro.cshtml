@@ -1,0 +1,196 @@
+﻿@using Cuidadores.Core.Entities
+@using Cuidadores.Util.Extensions
+@model Cuidadores.Web.Models.Pessoa.PessoaVm
+
+@{
+    ViewBag.Title = "Cadastro";
+}
+
+<br />
+
+@using (Html.BeginForm("Cadastro", "Home", FormMethod.Post, new { id = "form-cadastro-pessoa" }))
+{
+
+    <h3>Novo cadastro de usuário</h3>
+
+    <br />
+
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.TipoPessoa, new { @class = "form-group" })
+                @Html.DropDownListFor(x => x.TipoPessoa, TipoPessoa.Cuidador.ToSelectList(), new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.TipoPessoa)
+            </div>
+        </div>
+    </div>
+    
+    <div id="div-cadastro-campos">
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Especialidade", new { @class = "form-group", id = "lbl-especialidade" })
+                <br />
+                @Html.DropDownListFor(x => x.EspecialidadesSelecionadas, @Model.EspecialidadesList, new { @class = "multiselect-ui form-control", multiple = "multiple" })
+            </div>
+        </div>
+        
+        <div class="row">
+            <br />
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Nome, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Nome, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Nome)
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Rg, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Rg, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Rg)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Cpf, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Cpf, new { @class = "form-control", data_inputmask = "'mask': '999.999.999-99'" })
+                    @Html.ValidationMessageFor(x => x.Cpf)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Telefone, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Telefone, new { @class = "form-control", data_maskphone = "" })
+                    @Html.ValidationMessageFor(x => x.Telefone)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    @Html.LabelFor(x => x.Cep, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Cep, new { @class = "form-control", data_inputmask = "'mask': '99999-999'" })
+                    @Html.ValidationMessageFor(x => x.Cep)
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(x => x.Endereco, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Endereco, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Endereco)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    @Html.LabelFor(x => x.Numero, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Numero, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Numero)
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(x => x.Complemento, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Complemento, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Complemento)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    @Html.LabelFor(x => x.Bairro, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Bairro, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Bairro)
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(x => x.Cidade, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Cidade, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Cidade)
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(x => x.Uf, new { @class = "form-group" })
+                    @Html.DropDownListFor(x => x.Uf, Model.Uf == null ? UF.SP.ToSelectList() : Model.Uf.ToSelectList(), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Uf)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Email, new { @class = "form-group" })
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Email)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Senha, new { @class = "form-group" })
+                    @Html.PasswordFor(x => x.Senha, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Senha)
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary pull-right" style="margin-left: 10px;">Salvar</button>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-default pull-right">Cancelar</a>
+        </div>
+    </div>
+}
+
+<!-- Busca CEP -->
+<script type="text/javascript">
+    @*$('#form-cadastro-pessoa').on('change paste', '#Cep', function (event) {
+        event.preventDefault();
+
+        var cep = $(this).val();
+
+        $.ajax({
+            url: '@Url.Action("BuscaCep", "Home")',
+            data: { cep: cep },
+            type: "GET",
+            success: function (response) {
+                if (response.success) {
+                    $('#form-cadastro-pessoa #Endereco').val(response.endereco);
+                    $('#form-cadastro-pessoa #Bairro').val(response.bairro);
+                    $('#form-cadastro-pessoa #Cidade').val(response.cidade);
+                    $('#form-cadastro-pessoa #Uf').val(response.estado);
+                } else {
+                    alert(response.error);
+                }
+                return false;
+            }
+        });
+
+        return false;
+    });*@
+</script>
+
+<!-- Busca CEP -->
+<script type="text/javascript">
+    $('#form-cadastro-pessoa').on('change', '#TipoPessoa', function (event) {
+        event.preventDefault();
+
+        var tipoPessoa = $(this).val();
+
+        if (tipoPessoa === "Cuidador") {
+            $('#lbl-especialidade').text('Especialidades');
+        } else {
+            $('#lbl-especialidade').text('Necessidades Especiais');
+        }
+
+        return false;
+    });
+</script>

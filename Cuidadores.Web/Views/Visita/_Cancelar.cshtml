@@ -1,0 +1,30 @@
+﻿@using Cuidadores.Core.Entities
+@using Cuidadores.Util.Extensions
+@model Cuidadores.Core.Models.VisitaVm
+
+@using (Html.BeginForm("Cancelar", "Visita", FormMethod.Post))
+{
+    <div style="margin: 20px;">
+        @if (((Pessoa) ViewBag.CurrentUser).TipoPessoa == TipoPessoa.Cuidador)
+        {
+        <h4>Visita para @Model.PacienteNome</h4>
+        }
+        else
+        {
+        <h4>Visita de @Model.CuidadorNome</h4>
+        }
+
+        <br />
+
+        <input type="hidden" name="id" value="@Model.Id" />
+        <p>Data: @Model.DataVisita.ToStringDateTimeFriendly()</p>
+        <p>Endereço: <a href="https://www.google.com/maps/search/?api=1&query=@(Model.PacienteEndereco)">@Model.PacienteEndereco</a></p>
+        @Html.LabelFor(x => x.Justificativa)
+        @Html.TextAreaFor(x => x.Justificativa, new { @class = "form-control" })
+        
+        <br/>
+
+        <button type="submit" class="btn btn-success pull-right">Salvar</button>
+    </div>
+
+}
